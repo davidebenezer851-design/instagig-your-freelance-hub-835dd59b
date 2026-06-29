@@ -155,16 +155,19 @@ function SignUpForm({ initialRole }: { initialRole?: "freelancer" | "client" }) 
       onSubmit={async (e) => {
         e.preventDefault();
         setLoading(true);
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email, password,
           options: {
             emailRedirectTo: window.location.origin,
             data: { display_name: name, role },
           },
         });
+        if (!error && data.user) {
+          await supabase.from("user_roles").upsert({ user_id: data.user.id, role }, { onConflict: "user_id,role" });
+        }
         setLoading(false);
         if (error) toast.error(error.message);
-        else toast.success("Account created! Check your inbox to confirm.");
+        else toast.success("Account created!");
       }}
     >
       <div>

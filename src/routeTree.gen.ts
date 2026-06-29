@@ -20,8 +20,11 @@ import { Route as GigsIdRouteImport } from './routes/gigs.$id'
 import { Route as AuthenticatedSavedRouteImport } from './routes/_authenticated/saved'
 import { Route as AuthenticatedPostJobRouteImport } from './routes/_authenticated/post-job'
 import { Route as AuthenticatedPostGigRouteImport } from './routes/_authenticated/post-gig'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
+import { Route as AuthenticatedFreelancerRouteImport } from './routes/_authenticated/freelancer'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedClientRouteImport } from './routes/_authenticated/client'
 
 const JobsRoute = JobsRouteImport.update({
   id: '/jobs',
@@ -77,14 +80,29 @@ const AuthenticatedPostGigRoute = AuthenticatedPostGigRouteImport.update({
   path: '/post-gig',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedMessagesRoute = AuthenticatedMessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFreelancerRoute = AuthenticatedFreelancerRouteImport.update({
+  id: '/freelancer',
+  path: '/freelancer',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedClientRoute = AuthenticatedClientRouteImport.update({
+  id: '/client',
+  path: '/client',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
@@ -93,8 +111,11 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/gigs': typeof GigsRouteWithChildren
   '/jobs': typeof JobsRouteWithChildren
+  '/client': typeof AuthenticatedClientRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/freelancer': typeof AuthenticatedFreelancerRoute
   '/messages': typeof AuthenticatedMessagesRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/post-gig': typeof AuthenticatedPostGigRoute
   '/post-job': typeof AuthenticatedPostJobRoute
   '/saved': typeof AuthenticatedSavedRoute
@@ -107,8 +128,11 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/gigs': typeof GigsRouteWithChildren
   '/jobs': typeof JobsRouteWithChildren
+  '/client': typeof AuthenticatedClientRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/freelancer': typeof AuthenticatedFreelancerRoute
   '/messages': typeof AuthenticatedMessagesRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/post-gig': typeof AuthenticatedPostGigRoute
   '/post-job': typeof AuthenticatedPostJobRoute
   '/saved': typeof AuthenticatedSavedRoute
@@ -123,8 +147,11 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/gigs': typeof GigsRouteWithChildren
   '/jobs': typeof JobsRouteWithChildren
+  '/_authenticated/client': typeof AuthenticatedClientRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/freelancer': typeof AuthenticatedFreelancerRoute
   '/_authenticated/messages': typeof AuthenticatedMessagesRoute
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/post-gig': typeof AuthenticatedPostGigRoute
   '/_authenticated/post-job': typeof AuthenticatedPostJobRoute
   '/_authenticated/saved': typeof AuthenticatedSavedRoute
@@ -139,8 +166,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/gigs'
     | '/jobs'
+    | '/client'
     | '/dashboard'
+    | '/freelancer'
     | '/messages'
+    | '/onboarding'
     | '/post-gig'
     | '/post-job'
     | '/saved'
@@ -153,8 +183,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/gigs'
     | '/jobs'
+    | '/client'
     | '/dashboard'
+    | '/freelancer'
     | '/messages'
+    | '/onboarding'
     | '/post-gig'
     | '/post-job'
     | '/saved'
@@ -168,8 +201,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/gigs'
     | '/jobs'
+    | '/_authenticated/client'
     | '/_authenticated/dashboard'
+    | '/_authenticated/freelancer'
     | '/_authenticated/messages'
+    | '/_authenticated/onboarding'
     | '/_authenticated/post-gig'
     | '/_authenticated/post-job'
     | '/_authenticated/saved'
@@ -266,11 +302,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPostGigRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/messages': {
       id: '/_authenticated/messages'
       path: '/messages'
       fullPath: '/messages'
       preLoaderRoute: typeof AuthenticatedMessagesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/freelancer': {
+      id: '/_authenticated/freelancer'
+      path: '/freelancer'
+      fullPath: '/freelancer'
+      preLoaderRoute: typeof AuthenticatedFreelancerRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -280,20 +330,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/client': {
+      id: '/_authenticated/client'
+      path: '/client'
+      fullPath: '/client'
+      preLoaderRoute: typeof AuthenticatedClientRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedClientRoute: typeof AuthenticatedClientRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedFreelancerRoute: typeof AuthenticatedFreelancerRoute
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPostGigRoute: typeof AuthenticatedPostGigRoute
   AuthenticatedPostJobRoute: typeof AuthenticatedPostJobRoute
   AuthenticatedSavedRoute: typeof AuthenticatedSavedRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedClientRoute: AuthenticatedClientRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedFreelancerRoute: AuthenticatedFreelancerRoute,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPostGigRoute: AuthenticatedPostGigRoute,
   AuthenticatedPostJobRoute: AuthenticatedPostJobRoute,
   AuthenticatedSavedRoute: AuthenticatedSavedRoute,
