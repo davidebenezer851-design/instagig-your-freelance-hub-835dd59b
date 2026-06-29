@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Bookmark, Clock, DollarSign, MapPin } from "lucide-react";
+import { Bookmark, Clock, DollarSign, Heart, MapPin } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -18,6 +18,8 @@ export type JobCardData = {
   skills: string[] | null;
   created_at: string;
   proposals_count: number | null;
+  likes_count?: number | null;
+  saves_count?: number | null;
   profiles?: { display_name: string | null; location: string | null } | null;
 };
 
@@ -79,7 +81,11 @@ export function JobCard({ job }: { job: JobCardData }) {
         </div>
       )}
       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-        <span>{job.proposals_count ?? 0} proposals</span>
+        <span className="flex items-center gap-3">
+          <span>{job.proposals_count ?? 0} proposals</span>
+          <span className="flex items-center gap-1"><Heart className="h-3 w-3" /> {job.likes_count ?? 0}</span>
+          <span className="flex items-center gap-1"><Bookmark className="h-3 w-3" /> {job.saves_count ?? 0}</span>
+        </span>
         <Link to="/jobs/$id" params={{ id: job.id }} className="font-semibold text-primary hover:underline">View details →</Link>
       </div>
     </div>

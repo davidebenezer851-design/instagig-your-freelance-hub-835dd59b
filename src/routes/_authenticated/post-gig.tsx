@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { FileUploader, type Attachment } from "@/components/FileUploader";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/post-gig")({
@@ -25,6 +26,7 @@ function PostGig() {
   const [days, setDays] = useState("7");
   const [categoryId, setCategoryId] = useState<string>("");
   const [tags, setTags] = useState("");
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [loading, setLoading] = useState(false);
 
   const { data: cats } = useQuery({ queryKey: ["categories"], queryFn: async () => (await supabase.from("categories").select("*").order("name")).data ?? [] });
@@ -42,6 +44,7 @@ function PostGig() {
             setLoading(true);
             // Ensure freelancer role
             await supabase.from("user_roles").upsert({ user_id: user!.id, role: "freelancer" }, { onConflict: "user_id,role" });
+            const cover = attachments.find((a) => a.is_cover);
             const { data, error } = await supabase.from("gigs").insert({
               freelancer_id: user!.id,
               title, description,
@@ -49,6 +52,8 @@ function PostGig() {
               delivery_days: parseInt(days, 10),
               category_id: categoryId || null,
               tags: tags.split(",").map(t => t.trim()).filter(Boolean),
+              cover_url: cover?.url ?? null,
+              attachments: attachments as never,
             }).select("id").single();
             setLoading(false);
             if (error) return toast.error(error.message);
@@ -69,6 +74,11 @@ function PostGig() {
             </div>
           </div>
           <div className="space-y-2"><Label>Tags (comma-separated)</Label><Input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="logo, branding, vector" /></div>
+          <div className="space-y-2">
+            <Label>Gallery & cover image</Label>
+            <p className="text-xs text-muted-foreground">The image marked <span className="text-primary">Cover</span> becomes the gig thumbnail.</p>
+            <FileUploader value={attachments} onChange={setAttachments} folder="gigs" />
+          </div>
           <Button type="submit" className="w-full font-semibold" disabled={loading}>{loading ? "Publishing…" : "Publish gig"}</Button>
         </form>
       </div>

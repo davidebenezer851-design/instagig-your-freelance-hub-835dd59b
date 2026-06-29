@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { FileUploader, type Attachment } from "@/components/FileUploader";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/post-job")({
@@ -27,6 +28,7 @@ function PostJob() {
   const [experience, setExperience] = useState("intermediate");
   const [categoryId, setCategoryId] = useState("");
   const [skills, setSkills] = useState("");
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [loading, setLoading] = useState(false);
 
   const { data: cats } = useQuery({ queryKey: ["categories"], queryFn: async () => (await supabase.from("categories").select("*").order("name")).data ?? [] });
@@ -51,6 +53,7 @@ function PostJob() {
               experience_level: experience,
               category_id: categoryId || null,
               skills: skills.split(",").map(s => s.trim()).filter(Boolean),
+              attachments: attachments as never,
             }).select("id").single();
             setLoading(false);
             if (error) return toast.error(error.message);
@@ -79,6 +82,11 @@ function PostJob() {
             </div>
           </div>
           <div className="space-y-2"><Label>Skills (comma-separated)</Label><Input value={skills} onChange={(e) => setSkills(e.target.value)} placeholder="react, typescript, shopify" /></div>
+          <div className="space-y-2">
+            <Label>Attachments (optional)</Label>
+            <p className="text-xs text-muted-foreground">Brief, mockups, reference files — anything to help freelancers scope the work.</p>
+            <FileUploader value={attachments} onChange={setAttachments} folder="jobs" />
+          </div>
           <Button type="submit" className="w-full font-semibold" disabled={loading}>{loading ? "Posting…" : "Post job"}</Button>
         </form>
       </div>
