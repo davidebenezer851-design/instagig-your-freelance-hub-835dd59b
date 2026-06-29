@@ -67,9 +67,9 @@ function PostGig() {
             <div className="space-y-2"><Label>Starting price ($)</Label><Input type="number" min="5" required value={price} onChange={(e) => setPrice(e.target.value)} /></div>
             <div className="space-y-2"><Label>Delivery (days)</Label><Input type="number" min="1" required value={days} onChange={(e) => setDays(e.target.value)} /></div>
             <div className="space-y-2"><Label>Category</Label>
-              <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="h-9 w-full rounded-md border border-border bg-input px-3 text-sm">
-                <option value="">Choose…</option>
-                {cats?.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="h-9 w-full rounded-md border border-border bg-input px-3 text-sm text-foreground">
+                <option value="" className="bg-background text-foreground">Choose…</option>
+                {cats?.map((c) => <option key={c.id} value={c.id} className="bg-background text-foreground">{c.name}</option>)}
               </select>
             </div>
           </div>

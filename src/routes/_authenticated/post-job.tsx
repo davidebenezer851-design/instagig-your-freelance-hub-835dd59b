@@ -70,14 +70,14 @@ function PostJob() {
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={isHourly} onChange={(e) => setIsHourly(e.target.checked)} /> Pay hourly</label>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2"><Label>Experience level</Label>
-              <select value={experience} onChange={(e) => setExperience(e.target.value)} className="h-9 w-full rounded-md border border-border bg-input px-3 text-sm">
-                <option value="entry">Entry</option><option value="intermediate">Intermediate</option><option value="expert">Expert</option>
+              <select value={experience} onChange={(e) => setExperience(e.target.value)} className="h-9 w-full rounded-md border border-border bg-input px-3 text-sm text-foreground">
+                <option value="entry" className="bg-background text-foreground">Entry</option><option value="intermediate" className="bg-background text-foreground">Intermediate</option><option value="expert" className="bg-background text-foreground">Expert</option>
               </select>
             </div>
             <div className="space-y-2"><Label>Category</Label>
-              <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="h-9 w-full rounded-md border border-border bg-input px-3 text-sm">
-                <option value="">Choose…</option>
-                {cats?.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="h-9 w-full rounded-md border border-border bg-input px-3 text-sm text-foreground">
+                <option value="" className="bg-background text-foreground">Choose…</option>
+                {cats?.map((c) => <option key={c.id} value={c.id} className="bg-background text-foreground">{c.name}</option>)}
               </select>
             </div>
           </div>
