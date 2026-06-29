@@ -26,6 +26,19 @@ export function Navbar() {
     navigate({ to: "/auth", replace: true });
   }
 
+  async function switchRole() {
+    if (!user || !role) return;
+    const next = role === "freelancer" ? "client" : "freelancer";
+    const t = toast.loading(`Switching to ${next}…`);
+    await supabase.from("user_roles").delete().eq("user_id", user.id);
+    const { error } = await supabase.from("user_roles").insert({ user_id: user.id, role: next });
+    toast.dismiss(t);
+    if (error) { toast.error(error.message); return; }
+    await qc.invalidateQueries({ queryKey: ["user-role", user.id] });
+    toast.success(`You're now a ${next}`);
+    navigate({ to: next === "freelancer" ? "/freelancer" : "/client" });
+  }
+
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 md:px-6">
