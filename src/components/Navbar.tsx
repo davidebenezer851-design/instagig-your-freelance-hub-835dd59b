@@ -96,6 +96,11 @@ export function Navbar() {
                   {role !== "freelancer" && (
                     <DropdownMenuItem asChild><Link to="/post-job"><Plus className="mr-2 h-4 w-4" />Post a Job</Link></DropdownMenuItem>
                   )}
+                  {role && (
+                    <DropdownMenuItem onClick={switchRole}>
+                      <RefreshCw className="mr-2 h-4 w-4" />Switch to {role === "freelancer" ? "Client" : "Freelancer"}
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem asChild><Link to="/payments"><CreditCard className="mr-2 h-4 w-4" />Payments</Link></DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}><LogOut className="mr-2 h-4 w-4" />Sign out</DropdownMenuItem>
