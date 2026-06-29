@@ -41,7 +41,8 @@ export function PostPreviewSheet({
     queryKey: [`${kind}-like`, id, user?.id],
     queryFn: async () => {
       if (!user || !id) return false;
-      const { data } = await supabase.from(likesT).select(fk).eq(fk, id).eq("user_id", user.id).maybeSingle();
+      const col = fk as "gig_id";
+      const { data } = await supabase.from(likesT as "gig_likes").select(col).eq(col, id).eq("user_id", user.id).maybeSingle();
       return !!data;
     },
     enabled: !!user && !!id && open,
@@ -50,7 +51,8 @@ export function PostPreviewSheet({
     queryKey: [`${kind}-save`, id, user?.id],
     queryFn: async () => {
       if (!user || !id) return false;
-      const { data } = await supabase.from(savesT).select(fk).eq(fk, id).eq("user_id", user.id).maybeSingle();
+      const col = fk as "gig_id";
+      const { data } = await supabase.from(savesT as "gig_saves").select(col).eq(col, id).eq("user_id", user.id).maybeSingle();
       return !!data;
     },
     enabled: !!user && !!id && open,
@@ -60,8 +62,9 @@ export function PostPreviewSheet({
     mutationFn: async () => {
       if (!user) { navigate({ to: "/auth" }); return; }
       if (!id) return;
-      if (liked) await supabase.from(likesT).delete().eq(fk, id).eq("user_id", user.id);
-      else await supabase.from(likesT).insert({ [fk]: id, user_id: user.id } as never);
+      const col = fk as "gig_id";
+      if (liked) await supabase.from(likesT as "gig_likes").delete().eq(col, id).eq("user_id", user.id);
+      else await supabase.from(likesT as "gig_likes").insert({ [col]: id, user_id: user.id } as never);
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: [kind, id] }); qc.invalidateQueries({ queryKey: [`${kind}-like`, id] }); qc.invalidateQueries({ queryKey: [kind + "s"] }); },
   });
@@ -69,8 +72,9 @@ export function PostPreviewSheet({
     mutationFn: async () => {
       if (!user) { navigate({ to: "/auth" }); return; }
       if (!id) return;
-      if (saved) { await supabase.from(savesT).delete().eq(fk, id).eq("user_id", user.id); toast("Removed from saved"); }
-      else { await supabase.from(savesT).insert({ [fk]: id, user_id: user.id } as never); toast("Saved"); }
+      const col = fk as "gig_id";
+      if (saved) { await supabase.from(savesT as "gig_saves").delete().eq(col, id).eq("user_id", user.id); toast("Removed from saved"); }
+      else { await supabase.from(savesT as "gig_saves").insert({ [col]: id, user_id: user.id } as never); toast("Saved"); }
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: [kind, id] }); qc.invalidateQueries({ queryKey: [`${kind}-save`, id] }); qc.invalidateQueries({ queryKey: [kind + "s"] }); },
   });
