@@ -27,7 +27,7 @@ function BrowseJobs() {
     queryFn: async () => {
       let query = supabase
         .from("jobs")
-        .select("id,title,description,budget_min,budget_max,is_hourly,experience_level,skills,created_at,proposals_count,profiles(display_name,location)")
+        .select("id,title,description,budget_min,budget_max,is_hourly,experience_level,skills,created_at,proposals_count,likes_count,saves_count,profiles(display_name,location)")
         .eq("status", "open")
         .order("created_at", { ascending: false });
       if (search.q) query = query.ilike("title", `%${search.q}%`);

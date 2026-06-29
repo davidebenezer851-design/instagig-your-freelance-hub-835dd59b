@@ -15,6 +15,8 @@ export type GigCardData = {
   rating: number | null;
   reviews_count: number | null;
   tags: string[] | null;
+  likes_count?: number | null;
+  saves_count?: number | null;
   profiles?: { display_name: string | null; avatar_url: string | null } | null;
 };
 
@@ -52,7 +54,12 @@ export function GigCard({ gig }: { gig: GigCardData }) {
         await supabase.from("gig_likes").insert({ gig_id: gig.id, user_id: user.id });
       }
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["gig-like", gig.id] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["gig-like", gig.id] });
+      qc.invalidateQueries({ queryKey: ["featured-gigs"] });
+      qc.invalidateQueries({ queryKey: ["gigs"] });
+      qc.invalidateQueries({ queryKey: ["gig", gig.id] });
+    },
   });
 
   const toggleSave = useMutation({
@@ -66,7 +73,12 @@ export function GigCard({ gig }: { gig: GigCardData }) {
         toast("Saved to your collection");
       }
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["gig-save", gig.id] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["gig-save", gig.id] });
+      qc.invalidateQueries({ queryKey: ["featured-gigs"] });
+      qc.invalidateQueries({ queryKey: ["gigs"] });
+      qc.invalidateQueries({ queryKey: ["gig", gig.id] });
+    },
   });
 
   return (
@@ -118,6 +130,10 @@ export function GigCard({ gig }: { gig: GigCardData }) {
             <div className="text-[10px] uppercase tracking-wide text-muted-foreground">From</div>
             <div className="font-display text-lg font-bold text-primary">${gig.starting_price}</div>
           </div>
+        </div>
+        <div className="mt-2 flex items-center gap-3 text-[11px] text-muted-foreground">
+          <span className="flex items-center gap-1"><Heart className="h-3 w-3" /> {gig.likes_count ?? 0}</span>
+          <span className="flex items-center gap-1"><Bookmark className="h-3 w-3" /> {gig.saves_count ?? 0}</span>
         </div>
       </Link>
     </div>

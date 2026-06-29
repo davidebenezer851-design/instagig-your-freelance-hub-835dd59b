@@ -24,13 +24,19 @@ export const Route = createFileRoute("/auth")({
 });
 
 function AuthPage() {
-  const { tab = "signin", role: initialRole, redirect = "/dashboard" } = Route.useSearch();
+  const search = Route.useSearch();
+  const { role: initialRole, redirect = "/dashboard" } = search;
+  const tab = search.tab ?? "signin";
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState<"signin" | "signup">(tab);
+  const [signupEmail, setSignupEmail] = useState<string | null>(null);
+
+  useEffect(() => { setActiveTab(tab); }, [tab]);
 
   useEffect(() => {
-    if (user) navigate({ to: redirect as never, replace: true });
-  }, [user, navigate, redirect]);
+    if (user && !signupEmail) navigate({ to: redirect as never, replace: true });
+  }, [user, navigate, redirect, signupEmail]);
 
   return (
     <div className="grid min-h-screen md:grid-cols-2">
@@ -68,13 +74,18 @@ function AuthPage() {
             <span className="font-display text-lg font-bold">Insta<span className="text-primary">GIG</span></span>
           </Link>
 
-          <Tabs defaultValue={tab} className="w-full">
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "signin" | "signup")} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign in</TabsTrigger>
               <TabsTrigger value="signup">Create account</TabsTrigger>
             </TabsList>
-            <TabsContent value="signin"><SignInForm /></TabsContent>
-            <TabsContent value="signup"><SignUpForm initialRole={initialRole} /></TabsContent>
+            <TabsContent value="signin"><SignInForm prefillEmail={signupEmail ?? undefined} /></TabsContent>
+            <TabsContent value="signup">
+              <SignUpForm
+                initialRole={initialRole}
+                onSignedUp={(email) => { setSignupEmail(email); setActiveTab("signin"); }}
+              />
+            </TabsContent>
           </Tabs>
         </div>
       </div>
@@ -105,10 +116,12 @@ function GoogleButton() {
   );
 }
 
-function SignInForm() {
-  const [email, setEmail] = useState("");
+function SignInForm({ prefillEmail }: { prefillEmail?: string }) {
+  const [email, setEmail] = useState(prefillEmail ?? "");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => { if (prefillEmail) setEmail(prefillEmail); }, [prefillEmail]);
 
   return (
     <form
@@ -122,6 +135,11 @@ function SignInForm() {
         else toast.success("Welcome back!");
       }}
     >
+      {prefillEmail && (
+        <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-xs text-primary">
+          ✉️ Check <span className="font-semibold">{prefillEmail}</span> for a verification link, then sign in below.
+        </div>
+      )}
       <GoogleButton />
       <div className="relative my-2 text-center text-xs text-muted-foreground">
         <span className="bg-background px-2 relative z-10">or with email</span>
@@ -142,7 +160,7 @@ function SignInForm() {
   );
 }
 
-function SignUpForm({ initialRole }: { initialRole?: "freelancer" | "client" }) {
+function SignUpForm({ initialRole, onSignedUp }: { initialRole?: "freelancer" | "client"; onSignedUp: (email: string) => void }) {
   const [role, setRole] = useState<"freelancer" | "client">(initialRole ?? "freelancer");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -158,7 +176,7 @@ function SignUpForm({ initialRole }: { initialRole?: "freelancer" | "client" }) 
         const { data, error } = await supabase.auth.signUp({
           email, password,
           options: {
-            emailRedirectTo: window.location.origin,
+            emailRedirectTo: `${window.location.origin}/auth?tab=signin`,
             data: { display_name: name, role },
           },
         });
@@ -167,7 +185,11 @@ function SignUpForm({ initialRole }: { initialRole?: "freelancer" | "client" }) 
         }
         setLoading(false);
         if (error) toast.error(error.message);
-        else toast.success("Account created!");
+        else {
+          await supabase.auth.signOut();
+          toast.success("Account created — check your email to verify, then sign in.");
+          onSignedUp(email);
+        }
       }}
     >
       <div>

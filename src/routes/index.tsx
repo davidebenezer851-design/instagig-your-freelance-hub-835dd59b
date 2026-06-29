@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { GigCard } from "@/components/GigCard";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { useScrollFade } from "@/hooks/useScrollFade";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -18,12 +19,13 @@ export const Route = createFileRoute("/")({
 });
 
 function LandingPage() {
+  useScrollFade();
   const { data: featured } = useQuery({
     queryKey: ["featured-gigs"],
     queryFn: async () => {
       const { data } = await supabase
         .from("gigs")
-        .select("id,title,cover_url,starting_price,rating,reviews_count,tags,profiles(display_name,avatar_url)")
+        .select("id,title,cover_url,starting_price,rating,reviews_count,tags,likes_count,saves_count,profiles(display_name,avatar_url)")
         .eq("status", "active")
         .order("created_at", { ascending: false })
         .limit(8);
@@ -45,7 +47,7 @@ function LandingPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden" data-fade>
         <div className="absolute inset-0 grain-bg" />
         <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-16 md:px-6 md:pt-24">
           <div className="mx-auto max-w-3xl text-center">
@@ -96,7 +98,7 @@ function LandingPage() {
       </section>
 
       {/* Categories */}
-      <section className="border-y border-border/60 bg-card/40">
+      <section className="border-y border-border/60 bg-card/40" data-fade>
         <div className="mx-auto max-w-7xl px-4 py-10 md:px-6">
           <h2 className="mb-6 font-display text-2xl font-semibold">Explore categories</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
@@ -116,7 +118,7 @@ function LandingPage() {
       </section>
 
       {/* Featured gigs */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
+      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" data-fade>
         <div className="mb-6 flex items-end justify-between">
           <div>
             <h2 className="font-display text-3xl font-bold">Fresh gigs</h2>
@@ -141,7 +143,7 @@ function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section className="border-t border-border/60 bg-card/40">
+      <section className="border-t border-border/60 bg-card/40" data-fade>
         <div className="mx-auto max-w-7xl px-4 py-16 md:px-6">
           <h2 className="text-center font-display text-3xl font-bold">How InstaGIG works</h2>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
@@ -163,7 +165,7 @@ function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="mx-auto max-w-7xl px-4 py-20 md:px-6">
+      <section className="mx-auto max-w-7xl px-4 py-20 md:px-6" data-fade>
         <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-card p-10 md:p-16">
           <div className="absolute inset-0 grain-bg" />
           <div className="relative max-w-2xl">
