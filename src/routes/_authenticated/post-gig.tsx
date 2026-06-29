@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FileUploader, type Attachment } from "@/components/FileUploader";
 import { toast } from "sonner";
 
@@ -42,7 +43,11 @@ function PostGig() {
           onSubmit={async (e) => {
             e.preventDefault();
             setLoading(true);
-            // Ensure freelancer role
+            // Ensure profile exists (FK target) + freelancer role
+            await supabase.from("profiles").upsert(
+              { id: user!.id, display_name: user!.email?.split("@")[0] ?? "User" },
+              { onConflict: "id", ignoreDuplicates: true },
+            );
             await supabase.from("user_roles").upsert({ user_id: user!.id, role: "freelancer" }, { onConflict: "user_id,role" });
             const cover = attachments.find((a) => a.is_cover);
             const { data, error } = await supabase.from("gigs").insert({
@@ -67,10 +72,12 @@ function PostGig() {
             <div className="space-y-2"><Label>Starting price ($)</Label><Input type="number" min="5" required value={price} onChange={(e) => setPrice(e.target.value)} /></div>
             <div className="space-y-2"><Label>Delivery (days)</Label><Input type="number" min="1" required value={days} onChange={(e) => setDays(e.target.value)} /></div>
             <div className="space-y-2"><Label>Category</Label>
-              <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="h-9 w-full rounded-md border border-border bg-input px-3 text-sm text-foreground">
-                <option value="" className="bg-background text-foreground">Choose…</option>
-                {cats?.map((c) => <option key={c.id} value={c.id} className="bg-background text-foreground">{c.name}</option>)}
-              </select>
+              <Select value={categoryId} onValueChange={setCategoryId}>
+                <SelectTrigger><SelectValue placeholder="Choose…" /></SelectTrigger>
+                <SelectContent>
+                  {cats?.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <div className="space-y-2"><Label>Tags (comma-separated)</Label><Input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="logo, branding, vector" /></div>

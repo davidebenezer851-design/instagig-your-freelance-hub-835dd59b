@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Bookmark, Briefcase, LogOut, MessageCircle, Plus, Search, User as UserIcon } from "lucide-react";
+import { Bookmark, Briefcase, CreditCard, LogOut, MessageCircle, Plus, Search, User as UserIcon } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -71,6 +71,7 @@ export function Navbar() {
                   <DropdownMenuItem asChild><Link to="/saved"><Bookmark className="mr-2 h-4 w-4" />Saved</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link to="/post-gig"><Plus className="mr-2 h-4 w-4" />Post a Gig</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link to="/post-job"><Plus className="mr-2 h-4 w-4" />Post a Job</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link to="/payments"><CreditCard className="mr-2 h-4 w-4" />Payments</Link></DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}><LogOut className="mr-2 h-4 w-4" />Sign out</DropdownMenuItem>
                 </DropdownMenuContent>

@@ -20,6 +20,7 @@ import { Route as GigsIdRouteImport } from './routes/gigs.$id'
 import { Route as AuthenticatedSavedRouteImport } from './routes/_authenticated/saved'
 import { Route as AuthenticatedPostJobRouteImport } from './routes/_authenticated/post-job'
 import { Route as AuthenticatedPostGigRouteImport } from './routes/_authenticated/post-gig'
+import { Route as AuthenticatedPaymentsRouteImport } from './routes/_authenticated/payments'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
 import { Route as AuthenticatedFreelancerRouteImport } from './routes/_authenticated/freelancer'
@@ -80,6 +81,11 @@ const AuthenticatedPostGigRoute = AuthenticatedPostGigRouteImport.update({
   path: '/post-gig',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPaymentsRoute = AuthenticatedPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/freelancer': typeof AuthenticatedFreelancerRoute
   '/messages': typeof AuthenticatedMessagesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/payments': typeof AuthenticatedPaymentsRoute
   '/post-gig': typeof AuthenticatedPostGigRoute
   '/post-job': typeof AuthenticatedPostJobRoute
   '/saved': typeof AuthenticatedSavedRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/freelancer': typeof AuthenticatedFreelancerRoute
   '/messages': typeof AuthenticatedMessagesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/payments': typeof AuthenticatedPaymentsRoute
   '/post-gig': typeof AuthenticatedPostGigRoute
   '/post-job': typeof AuthenticatedPostJobRoute
   '/saved': typeof AuthenticatedSavedRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/_authenticated/freelancer': typeof AuthenticatedFreelancerRoute
   '/_authenticated/messages': typeof AuthenticatedMessagesRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/payments': typeof AuthenticatedPaymentsRoute
   '/_authenticated/post-gig': typeof AuthenticatedPostGigRoute
   '/_authenticated/post-job': typeof AuthenticatedPostJobRoute
   '/_authenticated/saved': typeof AuthenticatedSavedRoute
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/freelancer'
     | '/messages'
     | '/onboarding'
+    | '/payments'
     | '/post-gig'
     | '/post-job'
     | '/saved'
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/freelancer'
     | '/messages'
     | '/onboarding'
+    | '/payments'
     | '/post-gig'
     | '/post-job'
     | '/saved'
@@ -206,6 +217,7 @@ export interface FileRouteTypes {
     | '/_authenticated/freelancer'
     | '/_authenticated/messages'
     | '/_authenticated/onboarding'
+    | '/_authenticated/payments'
     | '/_authenticated/post-gig'
     | '/_authenticated/post-job'
     | '/_authenticated/saved'
@@ -302,6 +314,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPostGigRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/payments': {
+      id: '/_authenticated/payments'
+      path: '/payments'
+      fullPath: '/payments'
+      preLoaderRoute: typeof AuthenticatedPaymentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/onboarding': {
       id: '/_authenticated/onboarding'
       path: '/onboarding'
@@ -346,6 +365,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFreelancerRoute: typeof AuthenticatedFreelancerRoute
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedPaymentsRoute: typeof AuthenticatedPaymentsRoute
   AuthenticatedPostGigRoute: typeof AuthenticatedPostGigRoute
   AuthenticatedPostJobRoute: typeof AuthenticatedPostJobRoute
   AuthenticatedSavedRoute: typeof AuthenticatedSavedRoute
@@ -357,6 +377,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFreelancerRoute: AuthenticatedFreelancerRoute,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedPaymentsRoute: AuthenticatedPaymentsRoute,
   AuthenticatedPostGigRoute: AuthenticatedPostGigRoute,
   AuthenticatedPostJobRoute: AuthenticatedPostJobRoute,
   AuthenticatedSavedRoute: AuthenticatedSavedRoute,

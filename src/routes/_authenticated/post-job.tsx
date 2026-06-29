@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FileUploader, type Attachment } from "@/components/FileUploader";
 import { toast } from "sonner";
 
@@ -44,6 +45,10 @@ function PostJob() {
           onSubmit={async (e) => {
             e.preventDefault();
             setLoading(true);
+            await supabase.from("profiles").upsert(
+              { id: user!.id, display_name: user!.email?.split("@")[0] ?? "User" },
+              { onConflict: "id", ignoreDuplicates: true },
+            );
             await supabase.from("user_roles").upsert({ user_id: user!.id, role: "client" }, { onConflict: "user_id,role" });
             const { data, error } = await supabase.from("jobs").insert({
               client_id: user!.id, title, description,
@@ -70,15 +75,22 @@ function PostJob() {
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={isHourly} onChange={(e) => setIsHourly(e.target.checked)} /> Pay hourly</label>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2"><Label>Experience level</Label>
-              <select value={experience} onChange={(e) => setExperience(e.target.value)} className="h-9 w-full rounded-md border border-border bg-input px-3 text-sm text-foreground">
-                <option value="entry" className="bg-background text-foreground">Entry</option><option value="intermediate" className="bg-background text-foreground">Intermediate</option><option value="expert" className="bg-background text-foreground">Expert</option>
-              </select>
+              <Select value={experience} onValueChange={setExperience}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="entry">Entry</SelectItem>
+                  <SelectItem value="intermediate">Intermediate</SelectItem>
+                  <SelectItem value="expert">Expert</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2"><Label>Category</Label>
-              <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="h-9 w-full rounded-md border border-border bg-input px-3 text-sm text-foreground">
-                <option value="" className="bg-background text-foreground">Choose…</option>
-                {cats?.map((c) => <option key={c.id} value={c.id} className="bg-background text-foreground">{c.name}</option>)}
-              </select>
+              <Select value={categoryId} onValueChange={setCategoryId}>
+                <SelectTrigger><SelectValue placeholder="Choose…" /></SelectTrigger>
+                <SelectContent>
+                  {cats?.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <div className="space-y-2"><Label>Skills (comma-separated)</Label><Input value={skills} onChange={(e) => setSkills(e.target.value)} placeholder="react, typescript, shopify" /></div>
