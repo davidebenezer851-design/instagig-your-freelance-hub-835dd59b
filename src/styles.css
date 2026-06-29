@@ -2,6 +2,15 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* ===== InstaGIG animations ===== */
+@keyframes heart-pop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.45); }
+  60% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+.animate-heart-pop { animation: heart-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
 
 @custom-variant dark (&:is(.dark *));
 

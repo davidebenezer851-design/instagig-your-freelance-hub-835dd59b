@@ -35,8 +35,8 @@ function AuthPage() {
   useEffect(() => { setActiveTab(tab); }, [tab]);
 
   useEffect(() => {
-    if (user && !signupEmail) navigate({ to: redirect as never, replace: true });
-  }, [user, navigate, redirect, signupEmail]);
+    if (user) navigate({ to: redirect as never, replace: true });
+  }, [user, navigate, redirect]);
 
   return (
     <div className="grid min-h-screen md:grid-cols-2">
@@ -176,7 +176,7 @@ function SignUpForm({ initialRole, onSignedUp }: { initialRole?: "freelancer" | 
         const { data, error } = await supabase.auth.signUp({
           email, password,
           options: {
-            emailRedirectTo: `${window.location.origin}/auth?tab=signin`,
+            emailRedirectTo: `${window.location.origin}/dashboard`,
             data: { display_name: name, role },
           },
         });
@@ -184,12 +184,17 @@ function SignUpForm({ initialRole, onSignedUp }: { initialRole?: "freelancer" | 
           await supabase.from("user_roles").upsert({ user_id: data.user.id, role }, { onConflict: "user_id,role" });
         }
         setLoading(false);
-        if (error) toast.error(error.message);
-        else {
-          await supabase.auth.signOut();
-          toast.success("Account created — check your email to verify, then sign in.");
+        if (error) { toast.error(error.message); return; }
+        // Email auto-confirm is enabled → session is already active; go straight in.
+        if (data.session) {
+          toast.success("Welcome to InstaGIG!");
           onSignedUp(email);
+          return;
         }
+        // Fallback: try sign-in immediately
+        const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInErr) { toast("Account created — please sign in."); onSignedUp(email); }
+        else { toast.success("Welcome to InstaGIG!"); onSignedUp(email); }
       }}
     >
       <div>
