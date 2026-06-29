@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Bookmark, Briefcase, CreditCard, LogOut, MessageCircle, Plus, Search, User as UserIcon } from "lucide-react";
+import { Bookmark, Briefcase, CreditCard, LogOut, MessageCircle, Plus, Search, Settings, User as UserIcon } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
+import { NotificationBell } from "@/components/NotificationBell";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuSeparator, DropdownMenuTrigger,
@@ -50,6 +51,7 @@ export function Navbar() {
           </Link>
           {user ? (
             <>
+              <NotificationBell />
               <Link to="/messages">
                 <Button variant="ghost" size="icon" aria-label="Messages">
                   <MessageCircle className="h-4 w-4" />
@@ -68,6 +70,8 @@ export function Navbar() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-52">
                   <DropdownMenuItem asChild><Link to="/dashboard"><Briefcase className="mr-2 h-4 w-4" />Dashboard</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link to="/profile"><UserIcon className="mr-2 h-4 w-4" />Profile</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link to="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link to="/saved"><Bookmark className="mr-2 h-4 w-4" />Saved</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link to="/post-gig"><Plus className="mr-2 h-4 w-4" />Post a Gig</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link to="/post-job"><Plus className="mr-2 h-4 w-4" />Post a Job</Link></DropdownMenuItem>
