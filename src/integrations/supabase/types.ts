@@ -186,6 +186,60 @@ export type Database = {
           },
         ]
       }
+      invoices: {
+        Row: {
+          created_at: string
+          currency: string
+          due_date: string | null
+          id: string
+          items: Json
+          notes: string | null
+          number: string
+          recipient_id: string
+          sender_id: string
+          status: string
+          subtotal: number
+          tax: number
+          title: string
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          due_date?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          number?: string
+          recipient_id: string
+          sender_id: string
+          status?: string
+          subtotal?: number
+          tax?: number
+          title: string
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          due_date?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          number?: string
+          recipient_id?: string
+          sender_id?: string
+          status?: string
+          subtotal?: number
+          tax?: number
+          title?: string
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       job_likes: {
         Row: {
           created_at: string
@@ -479,6 +533,50 @@ export type Database = {
           username?: string | null
         }
         Relationships: []
+      }
+      proposals: {
+        Row: {
+          bid_amount: number
+          cover_letter: string
+          created_at: string
+          delivery_days: number
+          freelancer_id: string
+          id: string
+          job_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          bid_amount: number
+          cover_letter: string
+          created_at?: string
+          delivery_days?: number
+          freelancer_id: string
+          id?: string
+          job_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          bid_amount?: number
+          cover_letter?: string
+          created_at?: string
+          delivery_days?: number
+          freelancer_id?: string
+          id?: string
+          job_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposals_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reviews: {
         Row: {
