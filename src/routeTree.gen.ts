@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as JobsRouteImport } from './routes/jobs'
+import { Route as InvoicingRouteImport } from './routes/invoicing'
 import { Route as GigsRouteImport } from './routes/gigs'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -39,6 +40,11 @@ const PricingRoute = PricingRouteImport.update({
 const JobsRoute = JobsRouteImport.update({
   id: '/jobs',
   path: '/jobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvoicingRoute = InvoicingRouteImport.update({
+  id: '/invoicing',
+  path: '/invoicing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GigsRoute = GigsRouteImport.update({
@@ -140,6 +146,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/gigs': typeof GigsRouteWithChildren
+  '/invoicing': typeof InvoicingRoute
   '/jobs': typeof JobsRouteWithChildren
   '/pricing': typeof PricingRoute
   '/client': typeof AuthenticatedClientRoute
@@ -162,6 +169,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/gigs': typeof GigsRouteWithChildren
+  '/invoicing': typeof InvoicingRoute
   '/jobs': typeof JobsRouteWithChildren
   '/pricing': typeof PricingRoute
   '/client': typeof AuthenticatedClientRoute
@@ -186,6 +194,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/gigs': typeof GigsRouteWithChildren
+  '/invoicing': typeof InvoicingRoute
   '/jobs': typeof JobsRouteWithChildren
   '/pricing': typeof PricingRoute
   '/_authenticated/client': typeof AuthenticatedClientRoute
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/gigs'
+    | '/invoicing'
     | '/jobs'
     | '/pricing'
     | '/client'
@@ -232,6 +242,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/gigs'
+    | '/invoicing'
     | '/jobs'
     | '/pricing'
     | '/client'
@@ -255,6 +266,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/gigs'
+    | '/invoicing'
     | '/jobs'
     | '/pricing'
     | '/_authenticated/client'
@@ -279,6 +291,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   GigsRoute: typeof GigsRouteWithChildren
+  InvoicingRoute: typeof InvoicingRoute
   JobsRoute: typeof JobsRouteWithChildren
   PricingRoute: typeof PricingRoute
   ProfileIdRoute: typeof ProfileIdRoute
@@ -298,6 +311,13 @@ declare module '@tanstack/react-router' {
       path: '/jobs'
       fullPath: '/jobs'
       preLoaderRoute: typeof JobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invoicing': {
+      id: '/invoicing'
+      path: '/invoicing'
+      fullPath: '/invoicing'
+      preLoaderRoute: typeof InvoicingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gigs': {
@@ -494,6 +514,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   GigsRoute: GigsRouteWithChildren,
+  InvoicingRoute: InvoicingRoute,
   JobsRoute: JobsRouteWithChildren,
   PricingRoute: PricingRoute,
   ProfileIdRoute: ProfileIdRoute,
