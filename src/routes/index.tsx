@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Briefcase, MessageSquare, Search, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, Briefcase, FileText, MessageSquare, Search, Sparkles, Zap } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
