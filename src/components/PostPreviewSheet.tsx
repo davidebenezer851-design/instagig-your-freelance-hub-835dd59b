@@ -167,7 +167,7 @@ export function PostPreviewSheet({
             <div className="grid flex-1 grid-cols-1 gap-0 md:grid-cols-[1fr_320px]">
               {/* MAIN */}
               <div className="border-b border-border md:border-b-0 md:border-r">
-                {kind === "gig" && p.cover_url && (
+                {kind === "gig" && !!p.cover_url && (
                   <div className="aspect-[16/8] w-full overflow-hidden bg-secondary">
                     <img src={p.cover_url as string} alt={p.title as string} className="h-full w-full object-cover" />
                   </div>
