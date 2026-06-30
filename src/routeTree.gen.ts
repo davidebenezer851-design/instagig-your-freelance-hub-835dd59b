@@ -25,6 +25,7 @@ import { Route as AuthenticatedPostGigRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedPaymentsRouteImport } from './routes/_authenticated/payments'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
+import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
 import { Route as AuthenticatedFreelancerRouteImport } from './routes/_authenticated/freelancer'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedClientRouteImport } from './routes/_authenticated/client'
@@ -108,6 +109,11 @@ const AuthenticatedMessagesRoute = AuthenticatedMessagesRouteImport.update({
   path: '/messages',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedInvoicesRoute = AuthenticatedInvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedFreelancerRoute = AuthenticatedFreelancerRouteImport.update({
   id: '/freelancer',
   path: '/freelancer',
@@ -132,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/client': typeof AuthenticatedClientRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/freelancer': typeof AuthenticatedFreelancerRoute
+  '/invoices': typeof AuthenticatedInvoicesRoute
   '/messages': typeof AuthenticatedMessagesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/payments': typeof AuthenticatedPaymentsRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/client': typeof AuthenticatedClientRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/freelancer': typeof AuthenticatedFreelancerRoute
+  '/invoices': typeof AuthenticatedInvoicesRoute
   '/messages': typeof AuthenticatedMessagesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/payments': typeof AuthenticatedPaymentsRoute
@@ -174,6 +182,7 @@ export interface FileRoutesById {
   '/_authenticated/client': typeof AuthenticatedClientRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/freelancer': typeof AuthenticatedFreelancerRoute
+  '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
   '/_authenticated/messages': typeof AuthenticatedMessagesRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/payments': typeof AuthenticatedPaymentsRoute
@@ -196,6 +205,7 @@ export interface FileRouteTypes {
     | '/client'
     | '/dashboard'
     | '/freelancer'
+    | '/invoices'
     | '/messages'
     | '/onboarding'
     | '/payments'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/client'
     | '/dashboard'
     | '/freelancer'
+    | '/invoices'
     | '/messages'
     | '/onboarding'
     | '/payments'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/_authenticated/client'
     | '/_authenticated/dashboard'
     | '/_authenticated/freelancer'
+    | '/_authenticated/invoices'
     | '/_authenticated/messages'
     | '/_authenticated/onboarding'
     | '/_authenticated/payments'
@@ -373,6 +385,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMessagesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/invoices': {
+      id: '/_authenticated/invoices'
+      path: '/invoices'
+      fullPath: '/invoices'
+      preLoaderRoute: typeof AuthenticatedInvoicesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/freelancer': {
       id: '/_authenticated/freelancer'
       path: '/freelancer'
@@ -401,6 +420,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedClientRoute: typeof AuthenticatedClientRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedFreelancerRoute: typeof AuthenticatedFreelancerRoute
+  AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPaymentsRoute: typeof AuthenticatedPaymentsRoute
@@ -415,6 +435,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedClientRoute: AuthenticatedClientRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedFreelancerRoute: AuthenticatedFreelancerRoute,
+  AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPaymentsRoute: AuthenticatedPaymentsRoute,

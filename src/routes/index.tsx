@@ -1,12 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Briefcase, MessageSquare, Search, Sparkles, Zap } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { GigCard } from "@/components/GigCard";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 import { useScrollFade } from "@/hooks/useScrollFade";
+import heroVideo from "@/assets/hero.mp4.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,18 +18,6 @@ export const Route = createFileRoute("/")({
 
 function LandingPage() {
   useScrollFade();
-  const { data: featured } = useQuery({
-    queryKey: ["featured-gigs"],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("gigs")
-        .select("id,title,cover_url,starting_price,rating,reviews_count,tags,likes_count,saves_count,profiles(display_name,avatar_url)")
-        .eq("status", "active")
-        .order("created_at", { ascending: false })
-        .limit(8);
-      return data ?? [];
-    },
-  });
 
   const categories = [
     { slug: "design", label: "Design", emoji: "🎨" },
@@ -117,29 +103,34 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* Featured gigs */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" data-fade>
-        <div className="mb-6 flex items-end justify-between">
+      {/* Showreel */}
+      <section className="border-y border-border/60 bg-card/40" data-fade>
+        <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-16 md:grid-cols-2 md:px-6">
           <div>
-            <h2 className="font-display text-3xl font-bold">Fresh gigs</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Hand-picked talent ready to start today.</p>
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
+              <Zap className="h-3 w-3" /> Live on InstaGIG
+            </div>
+            <h2 className="font-display text-3xl font-bold md:text-4xl">See the marketplace in motion.</h2>
+            <p className="mt-3 text-muted-foreground">
+              Real freelancers, real clients, real deals — closed in minutes, not weeks. This is what InstaGIG looks like in the wild.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link to="/gigs"><Button className="font-semibold">Browse gigs</Button></Link>
+              <Link to="/jobs"><Button variant="secondary">Find jobs</Button></Link>
+            </div>
           </div>
-          <Link to="/gigs" className="hidden text-sm font-semibold text-primary hover:underline md:block">Browse all →</Link>
+          <div className="relative overflow-hidden rounded-3xl border border-primary/30 shadow-[0_30px_80px_-30px_color-mix(in_oklab,var(--primary)_40%,transparent)]">
+            <video
+              src={heroVideo.url}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="aspect-video h-full w-full object-cover"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-background/40 via-transparent to-primary/10" />
+          </div>
         </div>
-        {featured && featured.length > 0 ? (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {featured.map((g) => <GigCard key={g.id} gig={g as never} />)}
-          </div>
-        ) : (
-          <div className="rounded-2xl border border-dashed border-border p-12 text-center">
-            <Sparkles className="mx-auto h-10 w-10 text-primary" />
-            <h3 className="mt-4 font-display text-xl font-semibold">The marketplace is brand new</h3>
-            <p className="mt-2 text-sm text-muted-foreground">Be one of the first freelancers on InstaGIG.</p>
-            <Link to="/auth" search={{ tab: "signup", role: "freelancer" } as never}>
-              <Button className="mt-4 font-semibold">Post the first gig</Button>
-            </Link>
-          </div>
-        )}
       </section>
 
       {/* How it works */}
