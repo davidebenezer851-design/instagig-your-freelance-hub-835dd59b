@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import {
   LayoutDashboard, FilePlus, Users, Settings, Plus, Trash2, Download,
-  Save, CheckCircle2, Clock, AlertTriangle, FileText, DollarSign, Mail, Building2, X,
+  Save, CheckCircle2, Clock, AlertTriangle, FileText, DollarSign,
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
